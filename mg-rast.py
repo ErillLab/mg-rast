@@ -8,10 +8,15 @@ Created on Wed Oct 08 15:18:12 2014
 import requests
 import json
 import urllib2
+import os
 
 # Base API URL
 API_URL = 'http://api.metagenomics.anl.gov'
 
+#File Destination
+DESTINATION = "/Users/Dave/Desktop/"
+
+METAGENOME_LIST = [4508947.3]
 
 def validate_mg_id(mg_id):
     """
@@ -76,4 +81,15 @@ def download(url, destination):
     req = urllib2.Request(url)
     #req.add_header("Referer", best_sub["url"])
     file_data = urllib2.urlopen(req).read()
-    return file_data
+    with open(destination, "w") as local_file:
+        local_file.write(file_data)
+        
+links = get_download_links(4508947.3)
+print "Downloading......"
+download(links['299.1'], DESTINATION+"scaffolds.fna")
+print "Finished downloading the scaffolds......."
+download(links['550.1'], DESTINATION+"protein_cluster.map")
+print "Finished downloading the cluster map......."
+download(links['650.1'], DESTINATION+"protein.sims")
+print "Finished downloading the protein simularity......"
+print "Done!!!..."
